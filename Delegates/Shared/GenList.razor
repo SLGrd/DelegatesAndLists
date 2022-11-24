@@ -1,0 +1,187 @@
+﻿@using static Common.Models;
+@using static Common.Code;
+@using static Common.Data;
+
+<!-- Generate records for testing purposes -->
+<div class="row m-0 p-0">
+    <div class="col-8">@Msg</div>
+    <div class="col-2 mt-2">
+        <button class="btn btn-labeled btn-outline-primary btn-sm d-flex flex-row" style="width:100%;" @onclick="() => GenListPersons( nRecs)">Build <img class="htmlbtn" /></button>
+    </div>
+    <div class="col-2 mt-2">
+        <input type="number" style="width:100%;" @bind="@nRecs" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-11">
+        @if (persons == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Age</th>
+                        <th>Data Inicio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in persons)
+                    {
+                        <tr>
+                            <td>@p.PersonId</td>
+                            <td>@p.Name</td>
+                            <td>@p.Age</td>
+                            <td>@p.InitialDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    @if (persons.Count > 0)
+    {
+        <div class="col-12" style="border-top: solid 2px green"></div>
+
+        <div class="row">
+            <div class="col-6 mt-3"></div>
+            <div class="col-3 mt-3 m-0 p-0">
+                <Select class="d-flex flex-row p-1" style="width:99%;height:fit-content " @onchange="@(x => OnSelChange(x.Value.ToString()))">
+                    <option value="0" disabled selected hidden>--Select Filter--</option>
+                    <option value="1">Prime Numbers</option>
+                    <option value="2">Even Numbers</option>
+                    <option value="3">Odd Numbers</option>
+                </Select>
+            </div>
+            <div class="col-3 mt-3">
+                <button class="btn btn-labeled btn-outline-primary btn-sm d-flex flex-row" style="width:99%;" @onclick="() => FilterPersonsList()">Filter <img class="htmlbtn" /></button>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .h50 {
+        height: 50%;
+    }
+
+    .h90 {
+        height: 90%;
+    }
+
+    .h100 {
+        height: 100%;
+    }
+
+    .flexColStart {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        color: black;
+    }
+
+    .flexColCenter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: black;
+    }
+
+    .flexRowStart {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: left;
+        color: black;
+    }
+
+    .flexRowEnd {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: right;
+        color: black;
+    }
+
+    button {
+        btn btn-labeled btn-primary btn-sm
+    }
+
+    .htmlbtn {
+        background-image: url(/icons/maintenance_32px.png);
+        padding: 10px;
+        margin-left: 4px;
+        /*margin-left: 40px;*/
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+</style>
+
+@code {
+    private int nRecs = 12;
+    private string Msg = "";
+    List<Person> persons = new();    
+    string SelectedFilterOption = "0";
+
+    static decimal AddNumbers(decimal a, decimal b) => a + b;
+    static decimal SubNumbers(decimal a, decimal b) => a - b;
+    public static bool IsPrime(int number)
+    {
+        if (number < 1 ) return false;
+        return Enumerable.Range(2, (int)Math.Sqrt(number) - 1).All(divisor => number % divisor != 0);
+    }
+    static bool IsEven(int number) { return (number % 2 == 0);}
+    static bool IsOdd(int number)  { return (number % 2 != 0);}
+
+    public delegate decimal DelegateArithOperation(decimal x, decimal y);
+    public delegate bool DelegatePrimeNumber(int x);
+    public static DelegateArithOperation Fub = AddNumbers;
+
+    Func<int, bool> PrimeNumber = (x => IsPrime(x));
+    Predicate<int> NumeroPrimo = IsPrime;
+    DelegatePrimeNumber PriNum = IsPrime;
+
+    Func<decimal, decimal, decimal> Soma = AddNumbers;
+    Func<decimal, decimal, decimal> Adiciona = (x, y) => x + y;
+    
+    Predicate<int> EvenNumbers = IsEven;
+    Predicate<int> OddNumbers  = IsOdd;
+
+    Action<string> UserAlert = s => Console.WriteLine(s);
+
+    private void GenListPersons(int nRecs)
+    {
+        Msg = "";
+        try
+        {
+            //  Checks if sample data list is long enough to generate all unique records required
+            if (nRecs < (Enum.GetValues(typeof(FirstNames)).Length * Enum.GetValues(typeof(LastNames)).Length))
+                persons = Common.Code.GenPersons(nRecs);
+            else
+                Msg = "List length requires more unique records than we can generate !";
+        }
+        catch (Exception ex) { Msg = ex.Message; }
+    }
+    private void OnSelChange( string option)
+    {
+        SelectedFilterOption = option;
+    }
+
+    private void FilterPersonsList()
+    {
+        switch (SelectedFilterOption)
+        {
+            case "1": persons = persons.FindAll(x => PrimeNumber( x.PersonId)); break;
+            case "2": persons = persons.FindAll(x => EvenNumbers( x.PersonId)); break;
+            case "3": persons = persons.FindAll(x => OddNumbers(  x.PersonId)); break;
+        }
+    }
+}

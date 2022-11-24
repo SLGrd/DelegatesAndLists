@@ -1,0 +1,91 @@
+﻿@page "/FilterList"
+@using static Common.Models;
+@using static Common.Code;
+@using static Common.Data;
+
+<PageTitle>Filter Ex</PageTitle>
+
+<!-- Listas de pessoas -->
+<div class="container-fluid h100" style="background-color:lightgray;overflow-y:hidden;">
+    <div class="row">
+        <div class="col-12 flexColCC"> <h3>Using Filters Examples</h3> </div>
+
+        <div class="col-6" >
+            <div class="col-12 flexColCC"> <h3>Using Filters Examples Left</h3> </div>
+            <div class="row" style="border:solid 0px blue;margin: 1px 1px 1px 1px">
+                <div class="col-12 hpx" style="width:100%;background-color:lightgray; overflow-y: auto;">
+                    <GenList></GenList>
+                </div>                
+            </div>
+        </div>
+   
+        <div class="col-6">
+            <div class="col-12 flexColCC"> <h3>Using Filters Examples Right</h3> </div>
+            <div class="row" style="border:solid 0px blue;margin: 1px 1px 1px 1px">
+                <div class="col-12 hpx" style="width:100%;background-color:lightgray;  overflow-y: auto;">
+                    <GenList></GenList>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<style>
+    .hpx{ height : 900px};
+    .h50 { height: 50%; max-height: 500px;}
+    .h80 { height: 80%; max-height: 80%;}
+
+    .h100 {
+        height: 100%;
+        max-height : 100%;
+    }
+    .flexColSS {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: flex-start;
+        color: black;
+    }
+    .flexColSC {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        color: black;
+    }
+    .flexColCC {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: black;
+    }
+    .flexRowStart {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: left;
+        color: black;
+    }
+    .flexRowEnd {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: right;
+        color: black;
+    }
+    button {
+        btn btn-labeled btn-primary btn-sm
+    }
+    .htmlbtn {
+        background-image: url(/icons/maintenance_32px.png);
+        padding: 10px;
+        margin-left: 4px;
+        /*margin-left: 40px;*/
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+    </style>
+
+@code {
+}

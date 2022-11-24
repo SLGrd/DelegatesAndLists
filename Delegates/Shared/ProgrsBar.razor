@@ -1,0 +1,28 @@
+﻿<!-- Progress Bar -->
+
+    <div class="container progress" style="width:100%">
+        <div class="bar d-flex flex-row align-content-center justify-content-center" style="width:@Counter.ToString().Trim()%;font-size:22px;">
+            @Counter
+        </div>
+    </div>
+
+    <style>
+        .progress {
+            background-color: #333;
+            border-radius: 20px;
+            height: 40px;
+            width: 300px;
+            padding: 3px;
+        }
+        .bar {
+            content: '';
+            display: block;
+            background-color: lightgreen;
+            height: 100%;
+            border-radius: 20px;
+        }
+    </style>
+
+    @code {
+        [Parameter] public int Counter { get; set; } = 0;
+    }

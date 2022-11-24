@@ -1,0 +1,32 @@
+﻿@page "/ProgressBar"
+@using Common;
+
+<div class="container d-flex flex-column align-content-center justify-content-center h-100">
+    <div class="container d-flex flex-row align-content-center justify-content-center">
+        <h3>ProgressBar</h3>
+    </div>
+    <br />
+    <ProgrsBar Counter=@counter></ProgrsBar>
+    <br/>
+    <div class=" d-flex flex-row align-content-center justify-content-center">
+        <button class="btn btn-labeled btn-outline-primary btn-sm" style="width:9%;" @onclick="() => StartEvents()">@btnAction</button>
+    </div>
+</div>
+
+@code {
+    public int counter = 0;    
+    private string btnAction = "Start";
+    SimulateService sim = new();
+
+    private async void MyCounter(int count)
+    {
+        counter = (counter + count > 100) ? 0 : counter + count;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void StartEvents()
+    {
+        sim.StartSim(MyCounter);
+        btnAction = btnAction == "Start" ? "Stop" : "Start";
+    }
+}
